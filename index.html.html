@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080d12">
+<title>A Birthday Garden — A Little Celebration</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap');
+:root{--gold:#f1d39a;--cream:#fff5df;--muted:#c6c1b2;--bg:#080d12}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--cream);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+button{font:inherit}
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 100%,#243c32 0%,#101e1d 35%,#080d12 76%)}
+#sky:before{content:"";position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 16%,#fff 50%,transparent 60%),radial-gradient(2px 2px at 76% 20%,#f4d99c 50%,transparent 60%),radial-gradient(1px 1px at 39% 8%,#fff 50%,transparent 60%),radial-gradient(1px 1px at 88% 62%,#fff 50%,transparent 60%),radial-gradient(1px 1px at 24% 71%,#e9d6a5 50%,transparent 60%);opacity:.65;animation:twinkle 4s infinite alternate}
+@keyframes twinkle{to{opacity:.2;filter:brightness(1.8)}}
+#particles{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.firefly{position:absolute;width:3px;height:3px;border-radius:50%;background:#ffe4a6;box-shadow:0 0 12px 3px #f1cb7770;animation:drift var(--t) ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(var(--x),var(--y));opacity:.2}}
+.scene{position:relative;z-index:2;min-height:100svh;display:flex;align-items:center;justify-content:center;padding:42px 18px}
+.panel{width:min(760px,100%);text-align:center}
+.kicker{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);opacity:.85}
+h1,h2,.serif{font-family:'Cormorant Garamond',Georgia,serif;font-weight:300}
+h1{font-size:clamp(48px,10vw,94px);line-height:.92;margin:24px 0 18px;letter-spacing:-.035em}
+h1 em{font-style:normal;color:var(--gold)}
+.lead{max-width:480px;margin:0 auto;color:#d0cbbb;font-size:14px;line-height:1.9;font-weight:300}
+.goldline{width:62px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:26px auto}
+.cta{border:1px solid #d9bd82;background:linear-gradient(135deg,#f4dfb2,#c9a46a);color:#1b211c;padding:15px 24px;border-radius:3px;letter-spacing:.14em;text-transform:uppercase;font-size:10px;font-weight:500;cursor:pointer;box-shadow:0 8px 40px #d9b66c20;transition:.3s}
+.cta:hover{transform:translateY(-3px);box-shadow:0 12px 45px #d9b66c45}
+.envelope-wrap{height:220px;display:grid;place-items:center;margin:18px auto 24px;perspective:900px}
+.envelope{width:190px;height:128px;position:relative;background:#b99a68;box-shadow:0 20px 55px #0008;transform:rotate(-3deg);transition:transform .8s}
+.envelope:before{content:"";position:absolute;inset:0;background:linear-gradient(145deg,#d9c092,#8d7048);clip-path:polygon(0 0,50% 57%,100% 0,100% 100%,0 100%)}
+.flap{position:absolute;inset:0;background:#e2c99a;clip-path:polygon(0 0,100% 0,50% 62%);transform-origin:top;transition:transform 1s;z-index:3}
+.seal{position:absolute;z-index:4;left:50%;top:52%;transform:translate(-50%,-50%);width:33px;height:33px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f9e7ba,#a66e43);display:grid;place-items:center;color:#fff1ce;font-size:15px;box-shadow:0 2px 10px #0005}
+.letter{position:absolute;z-index:2;left:10px;right:10px;bottom:8px;height:100px;background:#fff5df;transition:transform 1s;display:grid;place-items:center;color:#80623c;font-family:'Cormorant Garamond';font-size:22px}
+.opening .flap{transform:rotateX(180deg)}.opening .letter{transform:translateY(-90px)}.opening .envelope{transform:rotate(0)}
+.hidden{display:none!important}
+#gardenScene{background:linear-gradient(180deg,#0b1216aa,#0b1216aa)}
+.garden-stage{height:330px;position:relative;max-width:600px;margin:20px auto 0;overflow:hidden}
+.moon{position:absolute;width:86px;height:86px;border-radius:50%;right:13%;top:12px;background:radial-gradient(circle at 35% 35%,#fff5d9,#d9bd82 65%,#9d8358);box-shadow:0 0 65px #efd49b55}
+.moon:after{content:"";position:absolute;width:82px;height:82px;border-radius:50%;background:#101e1d;left:20px;top:-9px}
+.ground{position:absolute;bottom:-75px;left:-15%;width:130%;height:170px;border-radius:50% 50% 0 0;background:linear-gradient(#314e39,#13281f);box-shadow:0 -15px 45px #a6c17a18}
+.plant{position:absolute;bottom:42px;width:4px;height:var(--h);left:var(--left);background:linear-gradient(#a7c17b,#527448);transform-origin:bottom;animation:sway 4s ease-in-out infinite alternate;animation-delay:var(--d)}
+@keyframes sway{to{transform:rotate(4deg)}}
+.leaf{position:absolute;width:38px;height:17px;background:linear-gradient(130deg,#91ae6b,#3c6848);border-radius:100% 0 100% 0;top:52%;left:-34px;transform:rotate(20deg)}
+.leaf.r{left:0;top:70%;transform:scaleX(-1) rotate(20deg)}
+.bloom{position:absolute;top:-28px;left:50%;width:72px;height:72px;transform:translateX(-50%) scale(0);animation:blossom 2s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:var(--d)}
+@keyframes blossom{to{transform:translateX(-50%) scale(1)}}
+.petal{position:absolute;left:25px;top:2px;width:22px;height:39px;border-radius:60% 60% 45% 45%;transform-origin:50% 34px;background:linear-gradient(135deg,#fff1d0,#dca0a0 75%);box-shadow:0 0 13px #f2c8a344}
+.petal:nth-child(1){transform:rotate(0)}.petal:nth-child(2){transform:rotate(45deg)}.petal:nth-child(3){transform:rotate(90deg)}.petal:nth-child(4){transform:rotate(135deg)}.petal:nth-child(5){transform:rotate(180deg)}.petal:nth-child(6){transform:rotate(225deg)}.petal:nth-child(7){transform:rotate(270deg)}.petal:nth-child(8){transform:rotate(315deg)}
+.pollen{position:absolute;left:27px;top:26px;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff3ad,#b77d36);box-shadow:0 0 18px #f2d17b}
+.message-card{max-width:600px;margin:0 auto;padding:clamp(24px,5vw,46px);border:1px solid #e4ca9160;background:linear-gradient(145deg,#fff8e9f5,#e8ddc9f0);color:#26372c;box-shadow:0 25px 80px #0007}
+.message-card h2{font-size:clamp(42px,8vw,65px);color:#405b40;margin:0 0 12px}
+.message-card p{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,4vw,25px);line-height:1.48;margin:13px 0}
+.verse{border-top:1px solid #c6b18d;margin-top:24px;padding-top:20px;color:#6b5839;font-family:'Cormorant Garamond',Georgia,serif;font-size:21px;font-style:italic;line-height:1.45}
+.reference{font:10px 'DM Sans';letter-spacing:.2em;text-transform:uppercase;color:#89714c;margin-top:12px}
+.cake{width:210px;height:150px;margin:26px auto 20px;position:relative}
+.cake-base{position:absolute;bottom:0;left:10px;width:190px;height:80px;border-radius:9px 9px 16px 16px;background:linear-gradient(90deg,#9b5d4d,#e5b7a0 45%,#a66a57);box-shadow:0 15px 35px #0006}
+.cake-base:before{content:"";position:absolute;top:0;left:0;width:100%;height:24px;border-radius:50%;background:#f4dfc7}
+.icing{position:absolute;top:8px;left:0;width:100%;height:30px;background:#f5dfc9;border-radius:50%;z-index:2}
+.icing:after{content:"";position:absolute;left:20px;top:13px;width:18px;height:22px;border-radius:0 0 12px 12px;background:#f5dfc9;box-shadow:36px 4px 0 #f5dfc9,75px 0 0 #f5dfc9,120px 4px 0 #f5dfc9}
+.candle{position:absolute;z-index:3;bottom:74px;left:98px;width:13px;height:52px;background:repeating-linear-gradient(135deg,#f8e6bb 0 7px,#b87569 7px 13px);border-radius:3px}
+.flame{position:absolute;left:2px;top:-22px;width:10px;height:19px;border-radius:50% 50% 45% 45%;background:radial-gradient(ellipse at 50% 70%,#fff8c9 0 25%,#ffbd55 55%,#f16b36);filter:drop-shadow(0 0 10px #ffbd55);animation:flicker .5s infinite alternate}
+@keyframes flicker{to{transform:scale(.85) rotate(5deg);filter:drop-shadow(0 0 17px #ffbd55)}}
+#finale{position:fixed;inset:0;z-index:10;pointer-events:none;overflow:hidden}
+.burst{position:absolute;width:5px;height:5px;border-radius:50%;background:#ffe6a1;box-shadow:0 0 8px 3px #f6d28a;animation:burst 1.5s ease-out forwards}
+@keyframes burst{0%{transform:translate(0,0) scale(.2);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+#nextGarden,#showMessage,#celebrate{margin-top:18px}
+footer{font-size:9px;letter-spacing:.25em;color:#aaa995;margin-top:35px}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="sky"></div><div id="particles"></div><div id="finale"></div>
+<section class="scene" id="intro">
+ <div class="panel">
+  <div class="kicker">A small surprise • made with warm wishes</div>
+  <h1>For a day<br>filled with <em>light.</em></h1>
+  <p class="lead">A birthday is a reminder of a life that means so much to the people around it. I made a little something to celebrate that.</p>
+  <div class="envelope-wrap"><div class="envelope" id="envelope"><div class="letter">A wish for you</div><div class="flap"></div><div class="seal">✦</div></div></div>
+  <button class="cta" id="openLetter">Open your little surprise</button>
+  <div class="goldline"></div><div class="kicker">A garden of birthday wishes</div>
+ </div>
+</section>
+<section class="scene hidden" id="gardenScene">
+ <div class="panel">
+  <div class="kicker">May this new year bloom beautifully</div>
+  <h1>With every good<br><em>wish.</em></h1>
+  <p class="lead">A little garden, growing with gratitude, joy and prayers for the year ahead.</p>
+  <div class="garden-stage">
+   <div class="moon"></div><div class="ground"></div>
+   <div class="plant" style="--left:22%;--h:145px;--d:-1s"><i class="leaf"></i><i class="leaf r"></i><div class="bloom" style="--d:.2s"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="pollen"></i></div></div>
+   <div class="plant" style="--left:49%;--h:195px;--d:-2s"><i class="leaf"></i><i class="leaf r"></i><div class="bloom" style="--d:.8s"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="pollen"></i></div></div>
+   <div class="plant" style="--left:77%;--h:132px;--d:-.5s"><i class="leaf"></i><i class="leaf r"></i><div class="bloom" style="--d:1.2s"><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="petal"></i><i class="pollen"></i></div></div>
+  </div>
+  <button class="cta" id="showMessage">There is a wish waiting for you</button>
+ </div>
+</section>
+<section class="scene hidden" id="messageScene">
+ <div class="panel">
+  <div class="kicker">A heartfelt birthday wish</div>
+  <div class="message-card">
+   <div class="kicker" style="color:#94774b">With respect & warm wishes</div>
+   <h2>Happy Birthday!</h2>
+   <p>Wishing your father a very happy birthday. May God bless him with good health, strength, peace and endless happiness.</p>
+   <p>May the year ahead bring him beautiful moments, success in all that matters, and countless reasons to smile. May he always be surrounded by the love of family and the warmth of those whose lives he has touched.</p>
+   <div class="verse">“The Lord bless you and keep you; the Lord make his face shine on you and be gracious to you; the Lord turn his face toward you and give you peace.”</div>
+   <div class="reference">Numbers 6:24–26</div>
+  </div>
+  <div class="cake"><div class="cake-base"><div class="icing"></div></div><div class="candle"><div class="flame"></div></div></div>
+  <button class="cta" id="celebrate">Make a birthday wish ✨</button>
+ </div>
+</section>
+<section class="scene hidden" id="endScene">
+ <div class="panel">
+  <div class="kicker">A final little blessing</div>
+  <h1>May the year ahead<br>be <em>beautiful.</em></h1>
+  <p class="lead">May every new morning bring hope, every challenge bring strength, and every day hold a reason to be thankful.</p>
+  <div class="goldline"></div>
+  <div class="kicker">Happy Birthday — with warmest wishes</div>
+  <footer>A LITTLE GARDEN OF BIRTHDAY WISHES</footer>
+ </div>
+</section>
+<script>
+const $=id=>document.getElementById(id);
+const scenes=['intro','gardenScene','messageScene','endScene'];
+function show(id){scenes.forEach(s=>$(s).classList.toggle('hidden',s!==id));window.scrollTo({top:0,behavior:'smooth'});}
+for(let i=0;i<42;i++){let p=document.createElement('i');p.className='firefly';p.style.left=Math.random()*100+'%';p.style.top=Math.random()*100+'%';p.style.setProperty('--t',(4+Math.random()*7)+'s');p.style.setProperty('--x',(Math.random()*50-25)+'px');p.style.setProperty('--y',(Math.random()*60-30)+'px');p.style.animationDelay=(-Math.random()*8)+'s';$('particles').appendChild(p)}
+$('openLetter').addEventListener('click',()=>{$('envelope').classList.add('opening');$('intro').classList.add('hidden');show('gardenScene')});
+$('showMessage').addEventListener('click',()=>show('messageScene'));
+function fireworks(){for(let k=0;k<5;k++){let cx=15+Math.random()*70,cy=15+Math.random()*45;for(let i=0;i<34;i++){let a=Math.PI*2*i/34,r=55+Math.random()*55,b=document.createElement('i');b.className='burst';b.style.left=cx+'%';b.style.top=cy+'%';b.style.setProperty('--tx',Math.cos(a)*r+'px');b.style.setProperty('--ty',Math.sin(a)*r+'px');b.style.animationDelay=(Math.random()*.25)+'s';$('finale').appendChild(b);setTimeout(()=>b.remove(),1900)}}}
+$('celebrate').addEventListener('click',()=>{fireworks();show('endScene');setTimeout(fireworks,450);setTimeout(fireworks,1000)});
+</script>
+</body>
+</html>
